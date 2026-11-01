@@ -854,12 +854,10 @@ function forces!(fs,
         end
     end
 
-    for inter in values(general_inters)
-        if evaluate_before_pairwise(inter)
-            AtomsCalculators.forces!(fs, sys, inter; neighbors=neighbors, step_n=step_n,
-                                     n_threads=n_threads, buffers=buffers, needs_vir=needs_vir,
-                                     visit_state=visit_state, strictness=strictness)
-        end
+    for inter in filter(evaluate_before_pairwise, values(general_inters))
+        AtomsCalculators.forces!(fs, sys, inter; neighbors=neighbors, step_n=step_n,
+                                 n_threads=n_threads, buffers=buffers, needs_vir=needs_vir,
+                                 visit_state=visit_state, strictness=strictness)
     end
 
     if length(pairwise_inters) > 0

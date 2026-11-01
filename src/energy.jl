@@ -273,10 +273,15 @@ function potential_energy(sys::System{<:Any, <:Any, <:Any, TH},
 
     if length(pairwise_inters) > 0
         use_vel = any_uses_velocity(pairwise_inters)
-        pe += with_pairwise_partition(values(pairwise_inters)) do pis_nonl, pis_nl
+        pe_pairwise = with_pairwise_partition(values(pairwise_inters)) do pis_nonl, pis_nl
             pairwise_pe_loop(sys.atoms, sys.coords, sys.velocities, sys.boundary,
                              neighbors, sys.energy_units, length(sys), pis_nonl, pis_nl,
                              step_n, Val(TH), Val(n_threads), Val(use_vel), Val(sys.grad_safe))
+        end
+        if any(evaluate_before_pairwise, values(general_inters))
+            pe += pe_pairwise
+        else
+            pe = pe_pairwise
         end
     end
 

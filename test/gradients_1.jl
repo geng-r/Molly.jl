@@ -557,7 +557,7 @@ end
     end
 end
 
-@testset "Enzyme $quantity gradient CPU $structure_file smoothness=$smoothness_correction" for smoothness_correction in (false, true),
+@testset "ReaxFF $quantity gradient CPU $structure_file smoothness=$smoothness_correction" for smoothness_correction in (false, true),
         quantity in (:energy, :force_loss), structure_file in ("ethane.pdb", "water.pdb")
     reaxff = ReaxFF(
         force_field_file=joinpath(data_dir, "ReaxFF", "force_fields", "Chenoweth_2008_CHO.ff"),
